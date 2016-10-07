@@ -1,0 +1,8 @@
+#!/bin/bash
+
+OPTIONS="$MINIO_EXTRA_PARAMETERS"
+
+set -eu
+cmd="$1"; shift
+
+exec $cmd "$@" $OPTIONS
