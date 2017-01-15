@@ -1,8 +1,8 @@
----
 sudo: required
-
 services:
-  - docker
-
+- docker
 script:
-  - docker build -t ausnimbus/minio-server:latest .
+- docker build -t ausnimbus/minio-server:latest .
+notifications:
+  slack:
+    secure: slJkuOyosi9lxf6l9TwxMrh5Jwkd+9W2LkOBb8sAx5j7EhxpccaCMiXS5JAlPyVEvIlhKpgq0lTX3nGZCy52KtDki+QK7ZSf7ml/Hi4ZB1h9wixCLrZZyPnaMYA/DTcSZfs3bmf7Eo1a86Am9S4+wKrnvQhCRICof3j6diejMpDxRHCZw+dYcbXx7VRwe/8dtiIFrdcfvtVoXGt3+F1giKhOUQh7Yem++JcFHcin5ZpbsC7PYVUGwzBkr4fPIGJH2BPVS1/W3aguiZ73YXLWsnxCxmHobS81KuHpBOgs7i4vktKHGlpbHI9s8cga5Q6yiFxPwpVIpGBHaxYOYAxY58VwIjzCsELd2CB2J1eEpmKYm0ySG5pIEoc5KnKdflIQ67NeF38Uu9GUz4epJat+PXa1TBS3fLlF85FpsqaK6b0k/ah1BztSGaQm6tJY1H/eO/WhixNiPPsOx+Urai93Ua4XAe+y5AyRH/9knThm/shComlbE+Iq3rlwmqgAUzRowJEvS0F/mvnhTL1uuphOXu00LLMvXq48i4vIRRhmx1/hbuoLQFXlpXMSE2EM2vk4/C9RgKMAHwU0bDDo3PZT791VZdQtE/pinX/PC7UbrQNwStlJD2Ky+JJML8QqBmdVja/bBzCKDDsIsKgqQ0vr23EkQPjhp16ajldlAvzswOo=
