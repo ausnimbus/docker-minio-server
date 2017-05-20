@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export MINIO_DIR=${MINIO_DIR:-"/opt/app-root/data"}
+
+export OPTIONS=${OPTIONS:-" server $MINIO_DIR"}
