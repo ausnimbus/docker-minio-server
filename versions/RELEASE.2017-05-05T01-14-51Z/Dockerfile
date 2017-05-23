@@ -15,7 +15,7 @@ LABEL summary="Platform for running Minio RELEASE.2017-05-05T01-14-51Z applicati
 
 ENV HOME=/opt/app-root/src
 
-RUN apk --no-cache add bash rsync git && rm -rf /var/cache/apk/* && \
+RUN apk --no-cache add bash rsync && rm -rf /var/cache/apk/* && \
     mkdir -p ${HOME}/.pki/nssdb && \
     chown -R 1001:0 ${HOME}/.pki && \
     adduser -S -u 1001 -G root -h ${HOME} -s /sbin/nologin \
@@ -32,6 +32,8 @@ COPY ./contrib/ /opt/app-root
 # </pre>
 # <component>
 
+RUN apk --no-cache add shadow && rm -rf /var/cache/apk/*
+
 # Copy the component scripts (override existing container-entrypoint)
 COPY ./component/bin/ /usr/bin/
 
@@ -41,18 +43,12 @@ COPY ./component/bin/ /usr/bin/
 LABEL io.openshift.expose-services="9000:http" \
     io.openshift.tags="component,minio"
 
-RUN mkdir -p /opt/app-root/data && \
-    chown -R 1001:0 /opt/app-root/data && \
-    chmod -R ug+rwx /opt/app-root/data
-
-VOLUME /opt/app-root/data
-
 # </template>
 # <post>
 
-# Drop the root user and make the content of /opt/app-root owned by user 1001
-RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
-USER 1001
+# Drop the root user and make the content of /opt/app-root owned by user default
+RUN chown -R default:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
+USER default
 
 ENTRYPOINT ["container-entrypoint"]
 

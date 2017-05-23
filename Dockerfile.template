@@ -1,8 +1,2 @@
 LABEL io.openshift.expose-services="9000:http" \
     io.openshift.tags="component,%NAME%"
-
-RUN mkdir -p /opt/app-root/data && \
-    chown -R 1001:0 /opt/app-root/data && \
-    chmod -R ug+rwx /opt/app-root/data
-
-VOLUME /opt/app-root/data

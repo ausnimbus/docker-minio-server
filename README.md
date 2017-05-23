@@ -18,7 +18,6 @@ The following environment variables are available to configure your Minio instan
 - MINIO_DIR: Minio data directory (default: `/opt/app-root/data`)
 - MINIO_EXTRA_OPTIONS: Extra parameters passed to `minio server`
 
-
 ## Versions
 
 The versions currently supported are:
