@@ -1,0 +1,13 @@
+#!/bin/bash
+
+NAME="minio"
+DISPLAY_NAME="Minio"
+REPO="ausnimbus/minio"
+FROM="minio/minio:%VERSION%"
+TEMPLATES="pre,component,template,post"
+VARIANT="alpine"
+VERSIONS="RELEASE.2017-05-05T01-14-51Z"
+
+DOCKER_PUSH=${DOCKER_PUSH:-"false"}
+
+source $(readlink -zf $(dirname "${BASH_SOURCE[0]}"))/../common/hack/run
