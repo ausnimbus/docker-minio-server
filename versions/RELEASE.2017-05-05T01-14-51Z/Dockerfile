@@ -15,6 +15,8 @@ LABEL summary="Platform for running Minio RELEASE.2017-05-05T01-14-51Z applicati
 
 ENV HOME=/opt/app-root/src
 
+USER 0
+
 RUN apk --no-cache add bash rsync && \
     mkdir -p ${HOME}/.pki/nssdb && \
     chown -R 1001:0 ${HOME}/.pki && \
