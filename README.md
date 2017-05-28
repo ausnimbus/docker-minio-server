@@ -1,9 +1,9 @@
 # Minio Container
 
-[![Build Status](https://travis-ci.org/ausnimbus/minio-container.svg?branch=master)](https://travis-ci.org/ausnimbus/minio-container)
-[![Docker Repository on Quay](https://quay.io/repository/ausnimbus/minio/status "Docker Repository on Quay")](https://quay.io/repository/ausnimbus/minio)
+[![Build Status](https://travis-ci.org/ausnimbus/minio-component.svg?branch=master)](https://travis-ci.org/ausnimbus/minio-component)
+[![Docker Repository on Quay](https://quay.io/repository/ausnimbus/minio-component/status "Docker Repository on Quay")](https://quay.io/repository/ausnimbus/minio-component)
 
-This repository contains the source for deploying [Minio](https://minio.io/)
+This repository contains the source for deploying [Minio](https://www.ausnimbus.com.au/apps/minio/)
 on [AusNimbus](https://www.ausnimbus.com.au/).
 
 ## Environment Variables
