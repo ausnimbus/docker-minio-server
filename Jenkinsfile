@@ -18,7 +18,7 @@ node {
                                                 "metadata" : [
                                                         "name" : "minio",
                                                         "labels" : [
-                                                                "builder" : "minio-component"
+                                                                "builder" : "minio"
                                                         ]
                                                 ],
                                                 "spec" : [
@@ -40,9 +40,9 @@ node {
                                                 "apiVersion" : "v1",
                                                 "kind" : "ImageStream",
                                                 "metadata" : [
-                                                        "name" : "minio-component",
+                                                        "name" : "minio",
                                                         "labels" : [
-                                                                "builder" : "minio-component"
+                                                                "builder" : "minio"
                                                         ]
                                                 ]
                                         ]
@@ -53,22 +53,22 @@ node {
                                 "apiVersion" : "v1",
                                 "kind" : "BuildConfig",
                                 "metadata" : [
-                                        "name" : "minio-component-${versions[i]}",
+                                        "name" : "minio-${versions[i]}",
                                         "labels" : [
-                                                "builder" : "minio-component"
+                                                "builder" : "minio"
                                         ]
                                 ],
                                 "spec" : [
                                         "output" : [
                                                 "to" : [
                                                         "kind" : "ImageStreamTag",
-                                                        "name" : "minio-component:${versions[i]}"
+                                                        "name" : "minio:${versions[i]}"
                                                 ]
                                         ],
                                         "runPolicy" : "Serial",
                                         "source" : [
                                                 "git" : [
-                                                        "uri" : "https://github.com/ausnimbus/minio-component"
+                                                        "uri" : "https://github.com/ausnimbus/minio"
                                                 ],
                                                 "type" : "Git"
                                         ],
@@ -84,7 +84,7 @@ node {
                                         ]
                                 ]
                         ])
-        echo "Created minio-component:${versions[i]} objects"
+        echo "Created minio:${versions[i]} objects"
         /**
         * TODO: Replace the sleep with import-image
         * openshift.importImage("minio:${versions[i]}-alpine")
@@ -92,9 +92,9 @@ node {
         sleep 60
 
         echo "==============================="
-        echo "Starting build minio-component-${versions[i]}"
+        echo "Starting build minio-${versions[i]}"
         echo "==============================="
-        def builds = openshift.startBuild("minio-component-${versions[i]}");
+        def builds = openshift.startBuild("minio-${versions[i]}");
 
         timeout(10) {
                 builds.untilEach(1) {
@@ -111,7 +111,7 @@ node {
         echo "Starting test application"
         echo "==============================="
 
-        def testApp = openshift.newApp("minio-component:${versions[i]}", "-l app=minio-ex");
+        def testApp = openshift.newApp("minio:${versions[i]}", "-l app=minio-ex");
         echo "new-app created ${testApp.count()} objects named: ${testApp.names()}"
         testApp.describe()
 
@@ -130,7 +130,7 @@ node {
 
         sleep 60
         echo "Testing endpoint ${testAppHost}:${testAppPort}"
-        sh "nc -z $testAppHost $testAppPort"
+        sh ": </dev/tcp/$testAppHost/$testAppPort"
 }
 
                         }
