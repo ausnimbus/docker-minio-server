@@ -22,4 +22,4 @@ The following environment variables are available to configure your Minio instan
 
 The versions currently supported are:
 
-- RELEASE.2017-05-05T01-14-51Z
+- latest

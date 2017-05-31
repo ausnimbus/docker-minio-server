@@ -3,15 +3,15 @@
 #
 # DO NOT EDIT IT DIRECTLY.
 #
-FROM minio/minio:RELEASE.2017-05-05T01-14-51Z
+FROM minio/minio:latest
 # <pre>
 
 MAINTAINER AusNimbus <support@ausnimbus.com.au>
 
-LABEL summary="Platform for running Minio RELEASE.2017-05-05T01-14-51Z applications" \
+LABEL summary="Platform for running Minio latest applications" \
       maintainer="AusNimbus <support@ausnimbus.com.au>" \
-      io.k8s.description="Platform for running Minio RELEASE.2017-05-05T01-14-51Z applications" \
-      io.k8s.display-name="Minio RELEASE.2017-05-05T01-14-51Z"
+      io.k8s.description="Platform for running Minio latest applications" \
+      io.k8s.display-name="Minio latest"
 
 ENV HOME=/opt/app-root/src
 

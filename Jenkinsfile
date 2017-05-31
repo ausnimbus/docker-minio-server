@@ -4,7 +4,7 @@
 * DO NOT EDIT IT DIRECTLY.
 */
 node {
-        def versions = "RELEASE.2017-05-05T01-14-51Z".split(',');
+        def versions = "latest".split(',');
         for (int i = 0; i < versions.length; i++) {
                 try {
                         stage("Build (Minio ${versions[i]})") {
