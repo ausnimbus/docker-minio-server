@@ -82,7 +82,7 @@ node {
                                                         "dockerfilePath" : "versions/${versions[i]}/Dockerfile",
                                                         "from" : [
                                                                 "kind" : "ImageStreamTag",
-                                                                "name" : "minio/minio:${versions[i]}"
+                                                                "name" : "minio:${versions[i]}-alpine"
                                                         ]
                                                 ],
                                                 "type" : "Docker"
