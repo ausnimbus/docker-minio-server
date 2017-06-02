@@ -4,11 +4,24 @@
 * DO NOT EDIT IT DIRECTLY.
 */
 node {
-        def versions = "latest".split(',');
-        for (int i = 0; i < versions.length; i++) {
-                try {
-                        stage("Build (Minio ${versions[i]})") {
-                                openshift.withCluster() {
+        def variants = "".split(',');
+        for (int v = 0; v < variants.length; v++) {
+
+                def versions = "latest".split(',');
+                for (int i = 0; i < versions.length; i++) {
+
+                  if (variants[v] == "default") {
+                    variant = ""
+                    tag = versions[i]
+                  } else {
+                    variant = variants[v]
+                    tag = versions[i] + "-" + variant
+                  }
+
+
+                        try {
+                                stage("Build (Minio-${tag})") {
+                                        openshift.withCluster() {
         openshift.apply([
                                 "apiVersion" : "v1",
                                 "items" : [
@@ -24,10 +37,10 @@ node {
                                                 "spec" : [
                                                         "tags" : [
                                                                 [
-                                                                        "name" : "${versions[i]}-alpine",
+                                                                        "name" : "${tag}",
                                                                         "from" : [
                                                                                 "kind" : "DockerImage",
-                                                                                "name" : "minio/minio:${versions[i]}",
+                                                                                "name" : "minio/minio:%VERSION%:${tag}",
                                                                         ],
                                                                         "referencePolicy" : [
                                                                                 "type" : "Source"
@@ -53,7 +66,7 @@ node {
                                 "apiVersion" : "v1",
                                 "kind" : "BuildConfig",
                                 "metadata" : [
-                                        "name" : "minio-component-${versions[i]}",
+                                        "name" : "minio-component-${tag}",
                                         "labels" : [
                                                 "builder" : "minio-component"
                                         ]
@@ -62,7 +75,7 @@ node {
                                         "output" : [
                                                 "to" : [
                                                         "kind" : "ImageStreamTag",
-                                                        "name" : "minio-component:${versions[i]}"
+                                                        "name" : "minio-component:${tag}"
                                                 ]
                                         ],
                                         "runPolicy" : "Serial",
@@ -79,27 +92,27 @@ node {
                                         ],
                                         "strategy" : [
                                                 "dockerStrategy" : [
-                                                        "dockerfilePath" : "versions/${versions[i]}/Dockerfile",
+                                                        "dockerfilePath" : "versions/${versions[i]}/${variant}/Dockerfile",
                                                         "from" : [
                                                                 "kind" : "ImageStreamTag",
-                                                                "name" : "minio:${versions[i]}-alpine"
+                                                                "name" : "minio:${tag}"
                                                         ]
                                                 ],
                                                 "type" : "Docker"
                                         ]
                                 ]
                         ])
-        echo "Created minio-component:${versions[i]} objects"
+        echo "Created minio-component:${tag} objects"
         /**
         * TODO: Replace the sleep with import-image
-        * openshift.importImage("minio:${versions[i]}-alpine")
+        * openshift.importImage("minio:${tag}")
         */
         sleep 60
 
         echo "==============================="
-        echo "Starting build minio-component-${versions[i]}"
+        echo "Starting build minio-component-${tag}"
         echo "==============================="
-        def builds = openshift.startBuild("minio-component-${versions[i]}");
+        def builds = openshift.startBuild("minio-component-${tag}");
 
         timeout(10) {
                 builds.untilEach(1) {
@@ -109,14 +122,14 @@ node {
         echo "Finished build ${builds.names()}"
 }
 
-                        }
-                        stage("Test (Minio ${versions[i]})") {
-                                openshift.withCluster() {
+                                }
+                                stage("Test (Minio-${tag})") {
+                                        openshift.withCluster() {
         echo "==============================="
         echo "Starting test application"
         echo "==============================="
 
-        def testApp = openshift.newApp("minio-component:${versions[i]}", "-l app=minio-ex");
+        def testApp = openshift.newApp("minio-component:${tag}", "-l app=minio-ex");
         echo "new-app created ${testApp.count()} objects named: ${testApp.names()}"
         testApp.describe()
 
@@ -138,28 +151,29 @@ node {
         sh ": </dev/tcp/$testAppHost/$testAppPort"
 }
 
-                        }
-                        stage("Stage (Minio ${versions[i]})") {
-                                openshift.withCluster() {
+                                }
+                                stage("Stage (Minio-${tag})") {
+                                        openshift.withCluster() {
         echo "==============================="
         echo "Tag new image into staging"
         echo "==============================="
 
-        openshift.tag("ausnimbus-ci/minio-component:${versions[i]}", "ausnimbus/minio-component:${versions[i]}")
+        openshift.tag("ausnimbus-ci/minio-component:${tag}", "ausnimbus/minio-component:${tag}")
 }
 
+                                }
+                        } finally {
+                                openshift.withCluster() {
+                                        echo "Deleting test resources minio-ex"
+                                        openshift.selector("dc", [app: "minio-ex"]).delete()
+                                        openshift.selector("bc", [app: "minio-ex"]).delete()
+                                        openshift.selector("svc", [app: "minio-ex"]).delete()
+                                        openshift.selector("is", [app: "minio-ex"]).delete()
+                                        openshift.selector("pods", [app: "minio-ex"]).delete()
+                                        openshift.selector("routes", [app: "minio-ex"]).delete()
+                                }
                         }
-                } finally {
-                        openshift.withCluster() {
-                                echo "Deleting test resources minio-ex"
-                                openshift.selector("dc", [app: "minio-ex"]).delete()
-                                openshift.selector("bc", [app: "minio-ex"]).delete()
-                                openshift.selector("svc", [app: "minio-ex"]).delete()
-                                openshift.selector("is", [app: "minio-ex"]).delete()
-                                openshift.selector("pods", [app: "minio-ex"]).delete()
-                                openshift.selector("routes", [app: "minio-ex"]).delete()
-                        }
-                }
 
+                }
         }
 }
