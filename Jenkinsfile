@@ -4,7 +4,7 @@
 * DO NOT EDIT IT DIRECTLY.
 */
 node {
-        def variants = "".split(',');
+        def variants = "alpine".split(',');
         for (int v = 0; v < variants.length; v++) {
 
                 def versions = "latest".split(',');
