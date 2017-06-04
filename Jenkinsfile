@@ -40,7 +40,7 @@ node {
                                                                         "name" : "${tag}",
                                                                         "from" : [
                                                                                 "kind" : "DockerImage",
-                                                                                "name" : "minio/minio:%VERSION%:${tag}",
+                                                                                "name" : "minio/minio:${versions[i]}",
                                                                         ],
                                                                         "referencePolicy" : [
                                                                                 "type" : "Source"
