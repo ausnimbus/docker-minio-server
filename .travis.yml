@@ -1,9 +1,23 @@
 sudo: required
-services:
-- docker
+matrix:
+  include:
+  - services:
+    - docker
+    env: VARIANTS=default
+  - services:
+    - docker
+    env: VARIANTS=alpine
+before_install:
+# Install s2i
+- |
+  go get github.com/openshift/source-to-image
+  pushd ${GOPATH}/src/github.com/openshift/source-to-image
+  export PATH=$PATH:${GOPATH}/src/github.com/openshift/source-to-image/_output/local/bin/linux/amd64/
+  hack/build-go.sh
+  popd
 script:
-- if [ "$TRAVIS_BRANCH" = "master" ]; then DOCKER_PUSH=true && docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" quay.io; fi
-- . hack/run build
+- if [ "$TRAVIS_BRANCH" = "master" ]; then export DOCKER_PUSH=true && docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" quay.io; fi
+- ./hack/run build
 notifications:
   slack:
     secure: WHnPv5pKbfQK9ERfyOSBZJAR2F2uasjeL7NkQ2a55V1J1lYezQO8wGxRkO7nYvbTTMXkocynk527gaPTvmsLEdKfFhPW1tleUUflPXvCqyTQonI7X3gV+wRsMJvFizFVHmZ/k//GBGc13YpIRtCZKcNRksfkzvEbjXgoutzdsnH46gLRponpNuiPVaklQEG9g9Vu2jXu3MrDsLJEVuRdbx6d4OINDw08ZLvwqjYIIQlRysDgyPa8vhP7MbfPoqTZUunX+5Fr916EgrH6EAYHkcJZBWWhwRKCMHmsiiUZs+ZNlcXOzF0kd5QliaQN6izNfGOlCYib72sAbuWu5GxiHZDGfnUXKb2hDjPq4kcxExQL0fU4hPJ3nTXPQBHdyB28x1JUm4rSNeY066zn5kiOY3SPiJRwGIj/KhYXo+elTpxmovneSI4Z5lB65xtyF/AodFKzYZYW7KnhQK9b/G2JCvdeJkqYc0k88XlXIx0SV376ixLyF92qRUe2tD8fjz23hJmPlMzwfENdE7QQktKkwkC1tAg/JDiK1yWusjGJjAoqLrEfFkzl1DEZd9LkcbBJEF5w/gaIoSCpS5rznRaaAksg/vRdhSZ+amGG7SbXd0UjXT/jCV84G1pujdN+WNiBOikAPxjHgxLjtFlF2PXslnqGzlTh7qPygh6BH0KZhDA=
