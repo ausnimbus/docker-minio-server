@@ -12,10 +12,12 @@ The following environment variables are available to configure your Minio instan
 
 - MINIO_ACCESS_KEY
 - MINIO_SECRET_KEY
-- MINIO_CACHE_SIZE
+- MINIO_BROWSER
+- MINIO_CACHE_SIZE (automatically configured)
 - MINIO_CACHE_EXPIRY
+- MINIO_MAXCONN
 
-- MINIO_DIR: Minio data directory (default: `/opt/app-root/data`)
+- MINIO_DIR: Minio data directory (default: `/export`)
 - MINIO_EXTRA_OPTIONS: Extra parameters passed to `minio server`
 
 ## Versions

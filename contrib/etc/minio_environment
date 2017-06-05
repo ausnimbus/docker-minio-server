@@ -1,6 +1,8 @@
 #!/bin/bash
+source cgroup-limits
 
-export MINIO_DIR=${MINIO_DIR:-"/opt/app-root/data"}
+export MINIO_CACHE_SIZE=${MINIO_CACHE_SIZE:-"$((MEMORY_LIMIT_IN_BYTES/1000000-32))M"}
+export MINIO_DIR=${MINIO_DIR:-"/export"}
 export MINIO_EXTRA_OPTIONS=${MINIO_EXTRA_OPTIONS:-""}
 
 export OPTIONS=${OPTIONS:-" server $MINIO_DIR $MINIO_EXTRA_OPTIONS"}
