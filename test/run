@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # The 'run' performs a simple test that verifies that image
 #

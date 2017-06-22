@@ -2,7 +2,6 @@
 
 NAME="minio"
 DISPLAY_NAME="Minio"
-REPO="minio-component"
 FROM="minio/minio:%VERSION%"
 TYPE="component"
 VARIANTS="alpine"

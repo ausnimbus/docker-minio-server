@@ -12,10 +12,10 @@ node {
 
                   if (variants[v] == "default") {
                     variant = ""
-                    tag = versions[i]
+                    tag = "${versions[i]}"
                   } else {
                     variant = variants[v]
-                    tag = versions[i] + "-" + variant
+                    tag = "${versions[i]}-${variant}"
                   }
 
 
@@ -158,7 +158,7 @@ node {
         echo "Tag new image into staging"
         echo "==============================="
 
-        openshift.tag("ausnimbus-ci/minio-component:${tag}", "ausnimbus/minio-component:${tag}")
+        openshift.tag("ausnimbus-ci/minio-component:${tag}", "ausnimbus-staging/minio-component:${tag}")
 }
 
                                 }
